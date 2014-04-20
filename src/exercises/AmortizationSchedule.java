@@ -38,20 +38,18 @@ import java.lang.IllegalArgumentException;
 
 public class AmortizationSchedule {
 
-	//private static Console console = System.console();
-
 	private long amountBorrowed = 0;		// in cents
 	private double apr = 0d;
 	private int initialTermMonths = 0;
 	
 	//constants
-	private final double monthlyInterestDivisor = 12d * 100d;
+	private final double MONTHLY_INTEREST_DIVISOR = 12d * 100d;
 	private double monthlyInterest = 0d;
 	private long monthlyPaymentAmount = 0;	// in cents
 
-	private static final double[] borrowAmountRange = new double[] { 0.01d, 1000000000000d };
-	private static final double[] aprRange = new double[] { 0.000001d, 100d };
-	private static final int[] termRange = new int[] { 1, 1000000 };
+	private static final double[] BORROW_AMOUNT_RANGE = new double[] { 0.01d, 1000000000000d };
+	private static final double[] APR_RANGE = new double[] { 0.000001d, 100d };
+	private static final int[] TERM_RANGE = new int[] { 1, 1000000 };
 	
 	private long calculateMonthlyPayment() {
 		// M = P * (J / (1 - (Math.pow(1/(1 + J), N))));
@@ -65,7 +63,7 @@ public class AmortizationSchedule {
 		// 
 		
 		// calculate J
-		monthlyInterest = apr / monthlyInterestDivisor;
+		monthlyInterest = apr / MONTHLY_INTEREST_DIVISOR;
 		
 		// this is 1 / (1 + J)
 		double tmp = Math.pow(1d + monthlyInterest, -1);
@@ -97,7 +95,7 @@ public class AmortizationSchedule {
 		// 
 
 		String formatString = "%1$-20s%2$-20s%3$-20s%4$s,%5$s,%6$s\n";
-		utility.printf(formatString,
+		Utility.printf(formatString,
 				"PaymentNumber", "PaymentAmount", "PaymentInterest",
 				"CurrentBalance", "TotalPayments", "TotalInterestPaid");
 		
@@ -108,7 +106,7 @@ public class AmortizationSchedule {
 		
 		// output is in dollars
 		formatString = "%1$-20d%2$-20.2f%3$-20.2f%4$.2f,%5$.2f,%6$.2f\n";
-		utility.printf(formatString, paymentNumber++, 0d, 0d,
+		Utility.printf(formatString, paymentNumber++, 0d, 0d,
 				((double) amountBorrowed) / 100d,
 				((double) totalPayments) / 100d,
 				((double) totalInterestPaid) / 100d);
@@ -143,7 +141,7 @@ public class AmortizationSchedule {
 			totalInterestPaid += curMonthlyInterest;
 			
 			// output is in dollars
-			utility.printf(formatString, paymentNumber++,
+			Utility.printf(formatString, paymentNumber++,
 					((double) curMonthlyPaymentAmount) / 100d,
 					((double) curMonthlyInterest) / 100d,
 					((double) curBalance) / 100d,
@@ -194,15 +192,15 @@ public class AmortizationSchedule {
 	}
 	
 	public static final double[] getBorrowAmountRange() {
-		return borrowAmountRange;
+		return BORROW_AMOUNT_RANGE;
 	}
 	
 	public static final double[] getAPRRange() {
-		return aprRange;
+		return APR_RANGE;
 	}
 
 	public static final int[] getTermRange() {
-		return termRange;
+		return TERM_RANGE;
 	}
 }
 
