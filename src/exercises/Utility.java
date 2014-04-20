@@ -6,8 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.IllegalFormatException;
 
-public class utility {
-	//private static Console console = System.console();
+public class Utility {
 	
 	public static String readLine(String userPrompt) throws IOException {
 		String line = "";
@@ -16,7 +15,6 @@ public class utility {
 		if (console != null) {
 			line = console.readLine(userPrompt);
 		} else {
-			// print("console is null\n");
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
 			print(userPrompt);
