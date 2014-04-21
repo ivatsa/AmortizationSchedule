@@ -36,48 +36,55 @@ package exercises;
 import java.lang.Math;
 import java.lang.IllegalArgumentException;
 
+/**
+ * The Class AmortizationSchedule.
+ */
 public class AmortizationSchedule {
 
+	//Input
 	private long amountBorrowed = 0;		// in cents
 	private double apr = 0d;
 	private int initialTermMonths = 0;
 	
-	//constants
-	private final double MONTHLY_INTEREST_DIVISOR = 12d * 100d;
 	private double monthlyInterest = 0d;
 	private long monthlyPaymentAmount = 0;	// in cents
-
-	private static final double[] BORROW_AMOUNT_RANGE = new double[] { 0.01d, 1000000000000d };
-	private static final double[] APR_RANGE = new double[] { 0.000001d, 100d };
-	private static final int[] TERM_RANGE = new int[] { 1, 1000000 };
 	
+	//Constants
+	private final double MONTHLY_INTEREST_DIVISOR = 12d * 100d;
+	public static final double[] BORROW_AMOUNT_RANGE = new double[] { 0.01d, 1000000000000d };
+	public static final double[] APR_RANGE = new double[] { 0.000001d, 100d };
+	public static final int[] TERM_RANGE = new int[] { 1, 1000000 };
+	
+	/**
+	 * Calculates monthly payment using formula
+	 *  M = P * (J / (1 - (Math.pow(1/(1 + J), N))));
+	 *	Where:
+	 *	P = Principal
+	 *	I = Interest
+	 *	J = Monthly Interest in decimal form:  I / (12 * 100)
+	 *	N = Number of months of loan
+	 *	M = Monthly Payment Amount
+	 *
+	 * @return the monthly payments to make
+	 */
 	private long calculateMonthlyPayment() {
-		// M = P * (J / (1 - (Math.pow(1/(1 + J), N))));
-		//
-		// Where:
-		// P = Principal
-		// I = Interest
-		// J = Monthly Interest in decimal form:  I / (12 * 100)
-		// N = Number of months of loan
-		// M = Monthly Payment Amount
-		// 
-		
-		// calculate J
 		monthlyInterest = apr / MONTHLY_INTEREST_DIVISOR;
-		
-		// this is 1 / (1 + J)
-		double tmp = Math.pow(1d + monthlyInterest, -1);
-		
-		// this is Math.pow(1/(1 + J), N)
+		double tmp = 1/(1d + monthlyInterest);
 		tmp = Math.pow(tmp, initialTermMonths);
+		tmp = 1/(1d - tmp);
+		double monthlyPayment = amountBorrowed * monthlyInterest * tmp;
 		
-		// this is 1 / (1 - (Math.pow(1/(1 + J), N))))
-		tmp = Math.pow(1d - tmp, -1);
-		
-		// M = P * (J / (1 - (Math.pow(1/(1 + J), N))));
-		double rc = amountBorrowed * monthlyInterest * tmp;
-		
-		return Math.round(rc);
+		return Math.round(monthlyPayment);
+	}
+	
+	/**
+	 * Prints the header line in the output on console
+	 */
+	private void printHeaders(){
+		String formatString = "%1$-20s%2$-20s%3$-20s%4$s,%5$s,%6$s\n";
+		Utility.printf(formatString,
+				"PaymentNumber", "PaymentAmount", "PaymentInterest",
+				"CurrentBalance", "TotalPayments", "TotalInterestPaid");
 	}
 	
 	// The output should include:
@@ -85,6 +92,9 @@ public class AmortizationSchedule {
 	//	The second column contains the amount of the payment.
 	//	The third column shows the amount paid to interest.
 	//	The fourth column has the current balance.  The total payment amount and the interest paid fields.
+	/**
+	 * Output amortization schedule.
+	 */
 	public void outputAmortizationSchedule() {
 		// 
 		// To create the amortization table, create a loop in your program and follow these steps:
@@ -93,19 +103,16 @@ public class AmortizationSchedule {
 		// 3.      Calculate Q = P - C, this is the new balance of your principal of your loan.
 		// 4.      Set P equal to Q and go back to Step 1: You thusly loop around until the value Q (and hence P) goes to zero.
 		// 
-
-		String formatString = "%1$-20s%2$-20s%3$-20s%4$s,%5$s,%6$s\n";
-		Utility.printf(formatString,
-				"PaymentNumber", "PaymentAmount", "PaymentInterest",
-				"CurrentBalance", "TotalPayments", "TotalInterestPaid");
 		
 		long balance = amountBorrowed;
 		int paymentNumber = 0;
 		long totalPayments = 0;
 		long totalInterestPaid = 0;
 		
+		printHeaders();
+		
 		// output is in dollars
-		formatString = "%1$-20d%2$-20.2f%3$-20.2f%4$.2f,%5$.2f,%6$.2f\n";
+		String formatString = "%1$-20d%2$-20.2f%3$-20.2f%4$.2f,%5$.2f,%6$.2f\n";
 		Utility.printf(formatString, paymentNumber++, 0d, 0d,
 				((double) amountBorrowed) / 100d,
 				((double) totalPayments) / 100d,
@@ -153,6 +160,14 @@ public class AmortizationSchedule {
 		}
 	}
 	
+	/**
+	 * Instantiates a new amortization schedule.
+	 *
+	 * @param Principal amount in Dollars
+	 * @param Rate of interest in percentage
+	 * @param Loan term in years
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
 	public AmortizationSchedule(double amount, double interestRate, int years) throws IllegalArgumentException {
 
 		if ((isValidBorrowAmount(amount) == false) ||
@@ -176,31 +191,36 @@ public class AmortizationSchedule {
 		}
 	}
 	
+	/**
+	 * Checks if borrowing amount is valid.
+	 *
+	 * @param amount in dollars
+	 * @return true, if it is valid borrow amount
+	 */
 	public static boolean isValidBorrowAmount(double amount) {
-		double range[] = getBorrowAmountRange();
+		double range[] = BORROW_AMOUNT_RANGE;
 		return ((range[0] <= amount) && (amount <= range[1]));
 	}
 	
+	/**
+	 * Checks if Annual Percentage Rate (APR) value is valid
+	 *
+	 * @param APR or Interest Rate in percentage
+	 * @return true, if it is valid APR value
+	 */
 	public static boolean isValidAPRValue(double rate) {
-		double range[] = getAPRRange();
+		double range[] = APR_RANGE;
 		return ((range[0] <= rate) && (rate <= range[1]));
 	}
 	
+	/**
+	 * Checks if Loan term is valid.
+	 *
+	 * @param Loan term in years
+	 * @return true, if it is valid term
+	 */
 	public static boolean isValidTerm(int years) {
-		int range[] = getTermRange();
+		int range[] = TERM_RANGE;
 		return ((range[0] <= years) && (years <= range[1]));
 	}
-	
-	public static final double[] getBorrowAmountRange() {
-		return BORROW_AMOUNT_RANGE;
-	}
-	
-	public static final double[] getAPRRange() {
-		return APR_RANGE;
-	}
-
-	public static final int[] getTermRange() {
-		return TERM_RANGE;
-	}
 }
-
