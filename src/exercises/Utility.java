@@ -9,7 +9,7 @@ import java.util.IllegalFormatException;
 /**
  * The Class Utility.
  * 
- * Provides all the input output functionality under one hood.
+ * Provides all the console related (input/output) functionality under one hood.
  */
 public class Utility {
 	
@@ -27,7 +27,8 @@ public class Utility {
 		if (console != null) {
 			line = console.readLine(userPrompt);
 		} else {
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+			BufferedReader bufferedReader = new BufferedReader(new 
+					InputStreamReader(System.in));
 
 			print(userPrompt);
 			line = bufferedReader.readLine();
@@ -46,7 +47,8 @@ public class Utility {
 	}
 	
 	/**
-	 * This method overrides the java provided printf to format the ouput better  
+	 * This method overrides the java provided printf to format the output
+	 * better  
 	 *
 	 * @param formatString according to which the values are output to console
 	 * @param args are the set of values passed

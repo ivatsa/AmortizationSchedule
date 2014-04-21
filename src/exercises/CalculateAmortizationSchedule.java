@@ -31,7 +31,8 @@ public class CalculateAmortizationSchedule {
 		try {
 			line = Utility.readLine(userPrompt);
 		} catch (IOException e) {
-			Utility.print("An IOException was encountered. Terminating program.\n");
+			Utility.print("An IOException was encountered. "
+					+ "Terminating program.\n");
 			return null;
 		}
 		return line;
@@ -48,7 +49,8 @@ public class CalculateAmortizationSchedule {
 		if (AmortizationSchedule.isValidBorrowAmount(amount) == false) {
 			isValidValue = false;
 			double range[] = AmortizationSchedule.BORROW_AMOUNT_RANGE;
-			Utility.print("Please enter a positive value between " + range[0] + " and " + range[1] + ". ");
+			Utility.print("Please enter a positive value between " + range[0]
+					+ " and " + range[1] + ". ");
 		}
 		return  isValidValue;
 	}
@@ -64,7 +66,8 @@ public class CalculateAmortizationSchedule {
 		if (AmortizationSchedule.isValidAPRValue(apr) == false) {
 			isValidValue = false;
 			double range[] = AmortizationSchedule.APR_RANGE;
-			Utility.print("Please enter a positive value between " + range[0] + " and " + range[1] + ". ");
+			Utility.print("Please enter a positive value between " + range[0]
+					+ " and " + range[1] + ". ");
 		}
 		return isValidValue;	
 	}
@@ -80,7 +83,8 @@ public class CalculateAmortizationSchedule {
 		if (AmortizationSchedule.isValidTerm(years) == false) {
 			isValidValue = false;
 			int range[] = AmortizationSchedule.TERM_RANGE;
-			Utility.print("Please enter a positive integer value between " + range[0] + " and " + range[1] + ". ");
+			Utility.print("Please enter a positive integer value between "
+			+ range[0] + " and " + range[1] + ". ");
 		}
 		return isValidValue;
 	}
@@ -138,10 +142,12 @@ public class CalculateAmortizationSchedule {
 		}
 		
 		try {
-			AmortizationSchedule as = new AmortizationSchedule(amount, apr, years);
+			AmortizationSchedule as = new AmortizationSchedule(amount, apr,
+				years);
 			as.outputAmortizationSchedule();
 		} catch (IllegalArgumentException e) {
-			Utility.print("Unable to process the values entered. Terminating program.\n");
+			Utility.print("Unable to process the values entered."
+					+ " Terminating program.\n");
 		}
 	}
 }
