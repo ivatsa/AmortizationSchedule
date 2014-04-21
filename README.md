@@ -45,6 +45,7 @@ To create the amortization table, create a loop in your program and follow these
 3. Class CalculateAmortizationSchedule
  * Driver class to exercise Amortization Schedule
 
-##### + Renamed variables following the Java naming conventions
+##### + Restructured the code following OO concepts as much as possible
+##### + Renamed variables for better redabiity and to follow the Java naming conventions
 ##### + Modularized code to make it more readable and ofcourse reusable
 ##### + Documented each function (JDoc style) which provides neat discricption box as you hover over methods.
